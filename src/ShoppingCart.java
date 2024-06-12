@@ -12,6 +12,7 @@ public class ShoppingCart {
 
     /**
      * Agrega un producto al carrito de compras
+     *
      * @param barcode Codigo de barras del producto
      * @throws SQLException Si ocurre un error al obtener el producto de la base de datos
      */
@@ -19,9 +20,15 @@ public class ShoppingCart {
         // Se obtiene el producto de la base de datos
         Product product = productManager.getProductByBarcode(barcode);
         // Si el producto no fue encontrado o no cuenta con cantidad en inventario
-        if (product == null) { System.out.println("Producto con codigo de barras: " + barcode + " no encontrado."); return; }
+        if (product == null) {
+            System.out.println("Producto con codigo de barras: " + barcode + " no encontrado.");
+            return;
+        }
         // Si el producto no cuenta con cantidad en inventario
-        if (product.getQuantity() == 0) { System.out.println("Producto con codigo de barras: " + barcode + " no cuenta con cantidad en inventario."); return; }
+        if (product.getQuantity() == 0) {
+            System.out.println("Producto con codigo de barras: " + barcode + " no cuenta con cantidad en inventario.");
+            return;
+        }
         // Se agrega el producto al carrito
         cart.put(product, cart.getOrDefault(product, 0) + 1);
     }
@@ -38,12 +45,16 @@ public class ShoppingCart {
 
     /**
      * Remueve un producto del carrito de compras
+     *
      * @param product Producto a remover
      * @return true si el producto fue removido exitosamente, false si no se encontro el producto en el carrito
      */
     public boolean removeProduct(Product product) {
         // Si el producto no se encuentra en el carrito
-        if (!cart.containsKey(product)) { System.out.println("Producto no encontrado en el carrito."); return false; }
+        if (!cart.containsKey(product)) {
+            System.out.println("Producto no encontrado en el carrito.");
+            return false;
+        }
         // Si el producto se encuentra en el carrito
         cart.remove(product);
         return true;
@@ -52,13 +63,20 @@ public class ShoppingCart {
 
     /**
      * Realiza la compra de los productos en el carrito
+     *
      * @throws SQLException Si ocurre un error al registrar la venta en la base de datos
      */
     public void checkout() throws SQLException {
         // Si el carrito esta vacio
-        if (cart.isEmpty()) { System.out.println("Carrito vacio, no se puede realizar la compra."); return; }
+        if (cart.isEmpty()) {
+            System.out.println("Carrito vacio, no se puede realizar la compra.");
+            return;
+        }
         // Si ocurrio un error al registrar la venta
-        if (!productManager.registerSell(this.cart, this.getTotalPrice())) { System.out.println("Error al registrar la venta."); return; }
+        if (!productManager.registerSell(this.cart, this.getTotalPrice())) {
+            System.out.println("Error al registrar la venta.");
+            return;
+        }
         System.out.println("Compra realizada exitosamente.");
         this.clearCart();
     }
@@ -73,6 +91,7 @@ public class ShoppingCart {
 
     /**
      * Obtiene el precio total de los productos en el carrito
+     *
      * @return Precio total
      */
     public double getTotalPrice() {
@@ -85,7 +104,4 @@ public class ShoppingCart {
         }
         return totalPrice;
     }
-
-
-
 }
