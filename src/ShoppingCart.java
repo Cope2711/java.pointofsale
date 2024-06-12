@@ -17,11 +17,11 @@ public class ShoppingCart {
      */
     public void addProduct(String barcode) throws SQLException {
         // Se obtiene el producto de la base de datos
-        Product product = productManager.getProduct(barcode);
+        Product product = productManager.getProductByBarcode(barcode);
         // Si el producto no fue encontrado o no cuenta con cantidad en inventario
         if (product == null) { System.out.println("Producto con codigo de barras: " + barcode + " no encontrado."); return; }
         // Si el producto no cuenta con cantidad en inventario
-        if (product.quantity == 0) { System.out.println("Producto con codigo de barras: " + barcode + " no cuenta con cantidad en inventario."); return; }
+        if (product.getQuantity() == 0) { System.out.println("Producto con codigo de barras: " + barcode + " no cuenta con cantidad en inventario."); return; }
         // Se agrega el producto al carrito
         cart.put(product, cart.getOrDefault(product, 0) + 1);
     }
@@ -32,7 +32,7 @@ public class ShoppingCart {
     public void showCart() {
         System.out.println("Carrito de compras:");
         for (Map.Entry<Product, Integer> entry : cart.entrySet()) {
-            System.out.println(entry.getKey().name + " - " + entry.getValue());
+            System.out.println(entry.getKey().getName() + " - " + entry.getValue());
         }
     }
 
@@ -81,7 +81,7 @@ public class ShoppingCart {
         // Por cada producto en el carrito
         for (Map.Entry<Product, Integer> entry : cart.entrySet()) {
             // Se obtiene el precio del producto y se multiplica por la cantidad de veces que se ha agregado al carrito
-            totalPrice += entry.getKey().price * entry.getValue();
+            totalPrice += entry.getKey().getPrice() * entry.getValue();
         }
         return totalPrice;
     }

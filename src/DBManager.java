@@ -39,10 +39,10 @@ public class DBManager {
      * Conecta a la base de datos
      */
     public void connect() {
-        String URL = "jdbc:mysql://localhost:3306/";
-        String USER = "root";
-        String PASSWORD = "kaliworst14.";
-        String DATABASE = "pointofsale";
+        String URL = System.getenv("DB_URL");
+        String USER = System.getenv("DB_USER");
+        String PASSWORD = System.getenv("DB_PASSWORD");
+        String DATABASE = System.getenv("DB_DATABASE");
 
         try {
             connection = DriverManager.getConnection(URL + DATABASE, USER, PASSWORD);
@@ -69,11 +69,11 @@ public class DBManager {
      * @param statement PreparedStatement
      * @return ResultSet
      */
-    public ResultSet executeSelect(PreparedStatement statement) {
+    public ResultSet executeSelect(PreparedStatement statement) throws SQLException {
         try {
             return statement.executeQuery();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw e;
         }
     }
 
@@ -82,11 +82,11 @@ public class DBManager {
      * @param statement PreparedStatement
      * @return Numero de filas afectadas
      */
-    public int executeAffected(PreparedStatement statement) {
+    public int executeAffected(PreparedStatement statement) throws SQLException {
         try {
             return statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw e;
         }
     }
 }
